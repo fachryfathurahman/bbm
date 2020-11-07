@@ -296,6 +296,7 @@ def main():
             input("Press Enter to continue...")
         elif input_user == '5':
             upload_data()
+            input("Press Enter to continue...")
         elif input_user == '6':
             search_date = input("masukkan tanggal: ")
             visualize_history(search_date)
@@ -304,6 +305,7 @@ def main():
         elif input_user == '0':
             upload_data()
             is_exit = False
+            input("Press Enter to continue...")
         os.system('cls')
 
 

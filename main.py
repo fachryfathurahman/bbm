@@ -197,6 +197,9 @@ def upload_data():
 
 # fungsi menampilkan penjualan harian
 def visualize_history(search_date):
+    colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd',
+              '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
+    
     list_history = get_history()
     del list_history[0]
     list_history = list(filter(lambda x: x[4] == search_date, list_history))
@@ -210,7 +213,8 @@ def visualize_history(search_date):
 
         plt.style.use('ggplot')
         plt.title(str("penjualan tanggal " + search_date))
-        plt.bar(dict_history.keys(), dict_history.values(), )
+
+        plt.bar(dict_history.keys(), dict_history.values(), color=colors)
         plt.show()
     else:
         print("data tidak ditemukan")

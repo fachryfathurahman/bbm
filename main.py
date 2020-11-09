@@ -76,6 +76,17 @@ def display_menu():
         print(i)
 
 
+# default fuel jika program tidak
+#  terhubung internet
+def get_default_json():
+    return [{"id": "pertamacks", "name": "Pertamacks", "price": 8500},
+            {"id": "pertamacks_super", "name": "Pertamacks Super", "price": 9000},
+            {"id": "pertamacks_pro", "name": "Pertamacks Pro", "price": 9500},
+            {"id": "pertamacks_lite", "name": "Pertamacks Lite", "price": 8000},
+            {"id": "deckslite", "name": "Deckslite", "price": 9200}, {"id": "decks", "name": "Decks", "price": 9500},
+            {"id": "vroom", "name": "Vroom", "price": 15000}, {"id": "pletocks", "name": "Pletocks", "price": 5000}]
+
+
 # fungsi mengambil harga
 def get_fuel():
     try:
@@ -83,9 +94,9 @@ def get_fuel():
         if response.status_code == 200:
             return response.json()
         else:
-            print('gagal menampilkan fuel')
+            return get_default_json()
     except requests.exceptions.RequestException as e:
-        print('error: ', e)
+        return get_default_json()
 
 
 # fungsi menampilkan
@@ -199,7 +210,7 @@ def upload_data():
 def visualize_history(search_date):
     colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd',
               '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
-    
+
     list_history = get_history()
     del list_history[0]
     list_history = list(filter(lambda x: x[4] == search_date, list_history))
@@ -237,6 +248,8 @@ def visualize_all():
         plt.title(str("penjualan sepanjang waktu"))
         plt.plot(dict_history.keys(), dict_history.values(), )
         plt.show()
+    else:
+        print("Data history kosong")
 
 
 # fungsi utama yang akan dijalankan

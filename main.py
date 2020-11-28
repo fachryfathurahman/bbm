@@ -1,5 +1,3 @@
-import csv
-
 import requests
 import os
 import re
@@ -36,16 +34,21 @@ def get_member():
     if not os.path.isfile('member_list.csv'):
         print('create file')
         with open('member_list.csv', 'w', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(["ID", "Nama", "Poin", "Waktu_Isi_Terakhir"])
+            header = ["ID", "Nama", "Poin", "Waktu_Isi_Terakhir"]
+            for item in header:
+                file.write(item+',')
+            file.write('\n')
     if not os.path.isfile('history_bbm.csv'):
         with open('history_bbm.csv', 'w', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(["No_Dispenser", "ID_member", "Jenis", "Jumlah", "Waktu", "Uploaded"])
+            header = ["No_Dispenser", "ID_member", "Jenis", "Jumlah", "Waktu", "Uploaded"]
+            for item in header:
+                file.write(item + ',')
+            file.write('\n')
 
     with open('member_list.csv', 'r') as file:
-        reader = csv.reader(file)
-        for row in reader:
+        for line in file:
+            row = line.split(',')
+            row = list(map(str.strip, row))
             list_member.append(row)
     return list_member
 
@@ -55,9 +58,11 @@ def get_member():
 def get_history():
     list_history = list()
     with open('history_bbm.csv', 'r', newline="") as read_obj:
-        reader = csv.reader(read_obj)
-        for row in reader:
+        for line in read_obj:
+            row = line.split(',')
+            row = list(map(str.strip, row))
             list_history.append(row)
+
     return list_history
 
 
@@ -141,6 +146,8 @@ def get_date():
 # setelah pengisian bahan bakar
 def write_history(no, id, jenis, jumlah):
     list_member = get_member()
+    print(list_member)
+    print("this")
     today = get_date()
 
     for i in list_member:
@@ -149,13 +156,18 @@ def write_history(no, id, jenis, jumlah):
             i[3] = today
 
     with open('member_list.csv', 'w', newline="") as write_obj:
-        writer = csv.writer(write_obj)
         for i in list_member:
-            writer.writerow(i)
+            for item in i:
+                if item != '':
+                    write_obj.write(str(item)+',')
+            write_obj.write('\n')
 
+    header = [no, id, jenis, jumlah, today, False]
     with open('history_bbm.csv', "a", newline="") as write_obj:
-        writer = csv.writer(write_obj)
-        writer.writerow([no, id, jenis, jumlah, today, False])
+        for item in header:
+            if item != '':
+                write_obj.write(str(item)+",")
+        write_obj.write("\n")
 
 
 # fungsi mengecek
@@ -169,10 +181,13 @@ def is_valid(x):
 def save_data(list_history):
     for i in list_history[1:]:
         i[5] = True
+    print(list_history)
     with open('history_bbm.csv', 'w', newline="") as write_obj:
-        writer = csv.writer(write_obj)
         for i in list_history:
-            writer.writerow(i)
+            for item in i:
+                if item != '':
+                    write_obj.write(str(item)+',')
+            write_obj.write('\n')
 
 
 # fungsi mengirim data
@@ -326,5 +341,5 @@ def main():
         os.system('cls')
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

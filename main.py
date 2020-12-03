@@ -1,23 +1,36 @@
 import os
 import re
 
-from io_file import get_member, write_history
-from network import get_fuel, upload_data
-from pump import Pump
-from visualize import visualize_all, visualize_history, display_menu, show_fuel, show_id, show_member
+from f1 import show_fuel
+from f2 import Pump
+from f3 import get_member, show_id, show_member
+from f4 import is_valid, get_input_fuel
+
+from f5 import upload_data
+from f6 import visualize_history
+from f7 import visualize_all
 
 
-# fungsi mengecek
-# inputan id member
-def is_valid(x):
-    return re.search("^\d{8}[A-Z]{3}$", x)
+# fungsi menampilkan menu
+def display_menu():
+    menu = ["-- menu --",
+            "1. Tampilkan Jenis dan Harga bahan bakar ",
+            "2. Ganti Nomor Pompa",
+            "3. Tampilkan Informasi Member",
+            "4. Isi Bahan Bakar",
+            "5. Upload Data Penjualan",
+            "6. Tampilkan Visualisasi Penjualan Harian",
+            "7. Tampilkan Visualisasi Penjualan Sepanjang Waktu",
+            "0. Exit"]
+    for i in menu:
+        print(i)
 
 
 # fungsi utama yang akan dijalankan
 def main():
     current_pump = Pump(1)
     member = get_member()
-    fuels = get_fuel()
+
     is_exit = True
     while is_exit:
         display_menu()
@@ -41,34 +54,7 @@ def main():
             input("Press Enter to continue...")
         elif input_user == '4':
             show_fuel()
-            jenis = input("pilih jenis BBM: ")
-            find = False
-            price = 0
-            for fuel in fuels:
-                if jenis in fuel['name']:
-                    find = True
-                    price = fuel['price']
-            if find:
-                try:
-                    liter = int(input("masukkan jumlah liter: "))
-                    total = price * liter
-                    print("Total Harga: ", total)
-                    is_lanjut = input("Lanjutkan pembelian\t(LANJUT/BATAL)?: ")
-                    if is_lanjut == "LANJUT":
-                        id_member = input("masukkan ID member (opsional): ")
-                        if is_valid(id_member) or id_member == "-":
-                            write_history(current_pump.number_pump, id_member, jenis, liter)
-                            print("Transaksi selesai")
-                        else:
-                            print("id tidak valid")
-                    elif is_lanjut == "BATAL":
-                        print("Tidak jadi membeli")
-                except ValueError:
-                    print("Input error")
-            else:
-                print("jenis bensin tidak ditemukan")
-
-            input("Press Enter to continue...")
+            get_input_fuel(current_pump.number_pump)
         elif input_user == '5':
             upload_data()
             input("Press Enter to continue...")

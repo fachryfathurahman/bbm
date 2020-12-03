@@ -1,4 +1,3 @@
-
 class Pump:
     def __init__(self, number_pump):
         self.number_pump = number_pump
